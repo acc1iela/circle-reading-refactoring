@@ -269,3 +269,91 @@ set discount(aNumber) {
 - データの変更を通じてコードの別の箇所が厄介な形で結合されるのはありがち
   - 一箇所の変更が見つかりにくい間接的な影響を及ぼすことがある
 - 変更可能なデータの影響範囲はできる限り小さくすることが重要
+
+---
+
+## 参照から値への変更
+
+```js
+class Product {
+  applyDiscount(arg) {
+    this._price.amount -= arg;
+  }
+}
+```
+
+`applyDiscount`メソッドは`_price`オブジェクトの`amount`プロパティを直接変更している
+これはオブジェクトの内部状態を直接変更してしまっていて不変性が保たれない可能性がある
+
+⬇︎
+
+```js
+class Product {
+  applyDiscount(arg) {
+    this._price = new Money(this._price.amount - arg, this._price.currency);
+  }
+}
+```
+
+変更後のコードは新しい`Money`オブジェクトを作成して、そのオブジェクトの`amount`プロパティに割引後の価格を設定している
+それから`_price` プロパティに新しい`Money`オブジェクトを代入している、これにより`_price`オブジェクトは変更されることなく新しいオブジェクトが作成されるため不変性が保たれる。
+
+- オブジェクトやデータ構造を入れ子にする時内部オブジェクトは参照か値として扱うことが可能
+- 両者の明確な違い
+  - 内部オブジェクトのプロパティ更新をどうやって処理するか
+    - 参照として扱う場合 → 内部オブジェクトのプロパティを更新して同じ内部オブジェクトを保持する
+    - 値として扱う場合は期待するプロパティを持つ新しい内部オブジェクトにまるごと置き換える
+
+別例）
+
+```js
+class Address {
+  constructor(city, street) {
+    this.city = city;
+    this.street = street;
+  }
+}
+
+class User {
+  constructor(address) {
+    this.address = address;
+  }
+
+  updateAddress(city, street) {
+    this.address.city = city;
+    this.address.street = street;
+  }
+}
+```
+
+リファクタリング前の`updateAddress`メソッドは`address`オブジェクトのプロパティを直接変更している。☠️
+
+**何が問題？**
+外部からこのオブジェクトを参照している場合、予期しない変更が発生する可能性がある。
+
+⬇︎
+
+```js
+class Address {
+  constructor(city, street) {
+    this.city = city;
+    this.street = street;
+  }
+}
+
+class User {
+  constructor(address) {
+    this.address = address;
+  }
+
+  updateAddress(city, street) {
+    // ここで新しいオブジェクトを作成している
+    this.address = new Address(city, street);
+  }
+}
+```
+
+リファクタリング後の実装では新しい`Address`オブジェクトを作成してそれを`address`プロパティに代入している。
+これにより元の`address`オブジェクトは変更されず新しいオブジェクトが作成されるためオブジェクトの普遍性が保たれる。🌈
+
+---
