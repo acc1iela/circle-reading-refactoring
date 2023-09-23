@@ -111,3 +111,14 @@ function discount(originalInputValue, quantity) {
   return inputValue;
 }
 ```
+
+より適切な名前にするために変数名の変更を 2 回行う。
+
+```js
+function discount(inputValue, quantity) {
+  let result = inputValue;
+  if (inputValue > 50) result = inputValue - 2;
+  if (quantity > 100) result = inputValue - 1;
+  return result;
+}
+```
