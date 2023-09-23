@@ -357,3 +357,69 @@ class User {
 これにより元の`address`オブジェクトは変更されず新しいオブジェクトが作成されるためオブジェクトの普遍性が保たれる。🌈
 
 ---
+
+## 値から参照への変更
+
+同じデータに対して複数のコピーを行うと、値が更新された際に問題となる。
+この場合は、値そのものではなく、参照に変更する必要がある。
+
+例）
+
+```js
+class Color {
+  constructor(r, g, b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+}
+
+// 同じ色を表す複数のインスタンス
+let red1 = new Color(255, 0, 0);
+let red2 = new Color(255, 0, 0);
+let red3 = new Color(255, 0, 0);
+
+console.log(red1 === red2); // false
+console.log(red2 === red3); // false
+```
+
+上記の例では同じ色を表す複数のインスタンスが作成されているが、それぞれのインスタンスは別のオブジェクトを参照しているため、それぞれのインスタンスは等しくない。
+
+⬇︎
+
+```js
+class Color {
+  constructor(r, g, b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+}
+
+class ColorRepository {
+  constructor() {
+    this.colors = {};
+  }
+
+  get(r, g, b) {
+    const key = `${r}-${g}-${b}`;
+    if (!this.colors[key]) {
+      this.colors[key] = new Color(r, g, b);
+    }
+    return this.colors[key];
+  }
+}
+
+const colorRepository = new ColorRepository();
+
+// リポジトリを使用して同じ色を参照
+let red1 = colorRepository.get(255, 0, 0);
+let red2 = colorRepository.get(255, 0, 0);
+let red3 = colorRepository.get(255, 0, 0);
+
+console.log(red1 === red2); // true
+console.log(red2 === red3); // true
+```
+
+上記の例では`ColorRepository`クラスを作成して色のオブジェクトを管理している。
+同じ色を表す`Color`オブジェクトはリポジトリを通じて取得されているため、同じオブジェクトを参照している。
