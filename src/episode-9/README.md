@@ -134,3 +134,30 @@ function discount(inputValue, quantity) {
 データ構造は非常に重要 → 理解しやすくするためには適切な名前をつけることが重要。
 
 **例）フィールド名の変更**
+
+```js
+class Organization {
+  constructor(data) {
+    this._name = data.name;
+    this._country = data.country;
+  }
+  get name() {
+    return this._name;
+  }
+  set name(aString) {
+    this._name = aString;
+  }
+  get country() {
+    return this._country;
+  }
+  set country(aCountryCode) {
+    this._country = aCountryCode;
+  }
+}
+
+// nameをtitleに変更したい
+// 以前出てきたレコードのカプセル化を使う
+const organization = new Organization({ name: 'Acme Gooseberries', country: 'GB' });
+```
+
+上記でレコード構造をクラスにカプセル化したため、名前を変更するのに必要な場所は getter, setter, コンストラクタ、内部データ構造の 4 つになる。
