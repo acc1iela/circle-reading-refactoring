@@ -1,13 +1,13 @@
 class Organization {
   constructor(data) {
-    this._name = data.name;
+    this._title = data.name;
     this._country = data.country;
   }
   get name() {
-    return this._name;
+    return this._title;
   }
   set name(aString) {
-    this._name = aString;
+    this._title = aString;
   }
   get country() {
     return this._country;
@@ -18,4 +18,4 @@ class Organization {
 }
 
 // nameをtitleに変更したい
-const organization = new Organization({ name: 'Acme Gooseberries', country: 'GB' });
+const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB' });

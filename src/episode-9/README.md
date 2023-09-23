@@ -161,3 +161,37 @@ const organization = new Organization({ name: 'Acme Gooseberries', country: 'GB'
 ```
 
 上記でレコード構造をクラスにカプセル化したため、名前を変更するのに必要な場所は getter, setter, コンストラクタ、内部データ構造の 4 つになる。
+
+```js
+class Organization {
+  constructor(data) {
+    this._title = data.name;
+    this._country = data.country;
+  }
+  get name() {
+    return this._title;
+  }
+  set name(aString) {
+    this._title = aString;
+  }
+  get country() {
+    return this._country;
+  }
+  set country(aCountryCode) {
+    this._country = aCountryCode;
+  }
+}
+
+// nameをtitleに変更したい
+const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB' });
+```
+
+1. `name`の値をクラスの private フィールドに変更（`_title`）
+2. `get name()` `name` の値を`_title`から返すように変更
+3. `set name()` `name` の値を`_title`に代入するように変更
+
+フィールド名として`_title`を導入したものの外部からアクセスメソッドの名前は`name`のままになっている。
+これにより外部からは`name`としてアクセスできるものの内部的には`_title`としてのデータが保持されるようになった。
+
+この変更で外部のコードに影響を与えずに内部のフィールド名が変更出来ている。
+外部からは`organization.name`としてアクセスできるものの内部的には`organization._title`としてアクセス出来るようになった。
