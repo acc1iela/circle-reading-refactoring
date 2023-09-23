@@ -16,3 +16,29 @@
 参照オブジェクトと値オブジェクトの混乱による問題の解消
 
 ---
+
+## 変数の分離
+
+```js
+let temp = 2 * (height + width);
+console.log(temp);
+temp = height * width;
+console.log(temp);
+```
+
+⬇︎
+
+```js
+const perimeter = 2 * (height + width);
+console.log(perimeter);
+const area = height * width;
+console.log(area);
+```
+
+リファクタリング後のコードは変数名が明確化されており`const`宣言が使用されているのでこの`area`が再代入されないということが保証されている。(good)
+
+**変数の分離をするべき時はいつ？？**
+
+変数の分離をするべき時は、変数が複数の役割を持ってしまっている時。
+基本的にループ用変数を除き、多くの変数は一つの役割を持つべき。
+上記の例で出しているように一つの変数を二つのことに使用すると読み手が混乱してしまう原因になる。
