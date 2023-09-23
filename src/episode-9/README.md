@@ -202,6 +202,7 @@ const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB
     this._country = data.country;
   }
 
+  // コンストラクタの呼び出し側を全て調べて新しい名前を使用するように変更できる
   const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB' });
 ```
 
