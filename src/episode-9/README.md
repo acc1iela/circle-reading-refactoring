@@ -65,3 +65,25 @@ function distanceTravelled(scenario, time) {
 
 1. 最初の力で加えられた初期化速度を保持する
 2. 最初と 2 回目の両方の力による加速度を保持する
+
+```js
+function distanceTravelled(scenario, time) {
+  let result;
+  const primaryAcceleration = scenario.primaryForce / scenario.mass;
+  let primaryTime = Math.min(time, scenario.delay);
+  result = 0.5 * primaryAcceleration * primaryTime * primaryTime;
+  let secondaryTime = time - scenario.delay;
+  if (secondaryTime > 0) {
+    let primaryVelocity = primaryAcceleration * scenario.delay;
+    let secondaryAcceleration = (scenario.primaryForce + scenario.secondaryForce) / scenario.mass;
+    result +=
+      primaryVelocity * secondaryTime + 0.5 * secondaryAcceleration * secondaryTime * secondaryTime;
+  }
+  return result;
+}
+```
+
+`acc`を`primaryAcceleration`に変更することで、`acc`がどのような役割を持っているのかが明確になった。
+そしてこの変数は一度しか代入されないということを保証するために`const`宣言を使用している。
+
+`acc`も正直変数名としては分かりづらいので`primaryAcceleration`に変更をしている。
