@@ -102,3 +102,12 @@ function discount(inputValue, quantity) {
 
 上記の例では　`inputValue`という変数が関数への入力パラメータと、呼び出し側に戻す結果の保持という二つの役割を持っている。
 この場合次のように変数を分離できる。
+
+```js
+function discount(originalInputValue, quantity) {
+  let inputValue = originalInputValue;
+  if (inputValue > 50) inputValue = inputValue - 2;
+  if (quantity > 100) inputValue = inputValue - 1;
+  return inputValue;
+}
+```
