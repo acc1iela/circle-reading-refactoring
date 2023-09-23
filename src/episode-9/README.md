@@ -231,3 +231,41 @@ class Organization {
 ```
 
 ---
+
+## 問い合わせによる導出変数の置き換え
+
+例）
+
+```js
+get discountedTotal() {
+  return this._discountedTotal;
+}
+
+set discount(aNumber) {
+  const old = this._discount;
+  this._discount = aNumber;
+  this._discountedTotal += old - aNumber;
+}
+```
+
+⬇︎
+
+```js
+get discountedTotal() {
+  return this._baseTotal - this._discount;
+}
+
+set discount(aNumber) {
+  this._discount = aNumber;
+}
+```
+
+1. `_discountedTotal`の計算ロジックがゲッターに移動された。これにより`_discountedTotal`の値を手動で更新する必要がなくなった。
+2. `discount`セッターは新しい割引額を設定するだけになった。古い割引額との差を計算して`_discountedTotal`の更新を手動で行う必要がなくなった。
+
+**このリファクタリングを行う動機**
+
+- ソフトウェアにおける問題の発生源として大きな割合を占めるのは変更可能なデータ
+- データの変更を通じてコードの別の箇所が厄介な形で結合されるのはありがち
+  - 一箇所の変更が見つかりにくい間接的な影響を及ぼすことがある
+- 変更可能なデータの影響範囲はできる限り小さくすることが重要
