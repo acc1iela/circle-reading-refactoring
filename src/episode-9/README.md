@@ -42,3 +42,26 @@ console.log(area);
 変数の分離をするべき時は、変数が複数の役割を持ってしまっている時。
 基本的にループ用変数を除き、多くの変数は一つの役割を持つべき。
 上記の例で出しているように一つの変数を二つのことに使用すると読み手が混乱してしまう原因になる。
+
+例）
+
+```js
+function distanceTravelled(scenario, time) {
+  let result;
+  let acc = scenario.primaryForce / scenario.mass;
+  let primaryTime = Math.min(time, scenario.delay);
+  result = 0.5 * acc * primaryTime * primaryTime;
+  let secondaryTime = time - scenario.delay;
+  if (secondaryTime > 0) {
+    let primaryVelocity = acc * scenario.delay;
+    acc = (scenario.primaryForce + scenario.secondaryForce) / scenario.mass;
+    result += primaryVelocity * secondaryTime + 0.5 * acc * secondaryTime * secondaryTime;
+  }
+  return result;
+}
+```
+
+読みづらい、、色々問題箇所はあるもののまずは`acc`という変数が二つの役割を持っていることが問題。
+
+1. 最初の力で加えられた初期化速度を保持する
+2. 最初と 2 回目の両方の力による加速度を保持する
