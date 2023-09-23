@@ -195,3 +195,15 @@ const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB
 
 この変更で外部のコードに影響を与えずに内部のフィールド名が変更出来ている。
 外部からは`organization.name`としてアクセスできるものの内部的には`organization._title`としてアクセス出来るようになった。
+
+```js
+  constructor(data) {
+    this._title = data.title !== undefined ? data.title : data.name;
+    this._country = data.country;
+  }
+
+  const organization = new Organization({ title: 'Acme Gooseberries', country: 'GB' });
+```
+
+これによりコンストラクタ側の呼び出しは name, title どちらでも呼び出せるようになった（title が優先される）
+ここまで済んだら`name`のフィールド名を`title`に変更することができる。
