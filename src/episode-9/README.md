@@ -87,3 +87,18 @@ function distanceTravelled(scenario, time) {
 そしてこの変数は一度しか代入されないということを保証するために`const`宣言を使用している。
 
 `acc`も正直変数名としては分かりづらいので`primaryAcceleration`に変更をしている。
+
+**例）入力パラメータへの代入**
+
+変数を分離すべき別のケースとして、入力パラメータに代入している場合がある。
+
+```js
+function discount(inputValue, quantity) {
+  if (inputValue > 50) inputValue = inputValue - 2;
+  if (quantity > 100) inputValue = inputValue - 1;
+  return inputValue;
+}
+```
+
+上記の例では　`inputValue`という変数が関数への入力パラメータと、呼び出し側に戻す結果の保持という二つの役割を持っている。
+この場合次のように変数を分離できる。
